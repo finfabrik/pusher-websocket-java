@@ -1,24 +1,20 @@
 package com.pusher.client.channel.impl;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.google.gson.Gson;
 import com.pusher.client.AuthorizationFailureException;
-import com.pusher.client.channel.Channel;
-import com.pusher.client.channel.ChannelEventListener;
-import com.pusher.client.channel.ChannelState;
-import com.pusher.client.channel.PresenceChannel;
-import com.pusher.client.channel.PrivateChannel;
-import com.pusher.client.channel.PrivateChannelEventListener;
+import com.pusher.client.channel.*;
 import com.pusher.client.connection.ConnectionEventListener;
 import com.pusher.client.connection.ConnectionState;
 import com.pusher.client.connection.ConnectionStateChange;
 import com.pusher.client.connection.impl.InternalConnection;
 import com.pusher.client.util.Factory;
 
-public class ChannelManager implements ConnectionEventListener {
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
+public class ChannelManager implements ConnectionEventListener {
+    private static final Logger log = Logger.getLogger(ChannelManager.class.getName());
     private static final Gson GSON = new Gson();
     private final Map<String, InternalChannel> channelNameToChannelMap = new ConcurrentHashMap<String, InternalChannel>();
 
@@ -138,6 +134,7 @@ public class ChannelManager implements ConnectionEventListener {
                 if (connection.getState() == ConnectionState.CONNECTED) {
                     try {
                         final String message = channel.toSubscribeMessage();
+                        log.info("Subscribing " + message);
                         connection.sendMessage(message);
                         channel.updateState(ChannelState.SUBSCRIBE_SENT);
                     } catch (final AuthorizationFailureException e) {

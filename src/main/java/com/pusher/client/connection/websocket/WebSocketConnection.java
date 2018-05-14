@@ -1,5 +1,14 @@
 package com.pusher.client.connection.websocket;
 
+import com.google.gson.Gson;
+import com.pusher.client.connection.ConnectionEventListener;
+import com.pusher.client.connection.ConnectionState;
+import com.pusher.client.connection.ConnectionStateChange;
+import com.pusher.client.connection.impl.InternalConnection;
+import com.pusher.client.util.Factory;
+import org.java_websocket.handshake.ServerHandshake;
+
+import javax.net.ssl.SSLException;
 import java.net.Proxy;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -11,18 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-
-import javax.net.ssl.SSLException;
-
-import com.pusher.java_websocket.handshake.ServerHandshake;
-
-import com.google.gson.Gson;
-
-import com.pusher.client.connection.ConnectionEventListener;
-import com.pusher.client.connection.ConnectionState;
-import com.pusher.client.connection.ConnectionStateChange;
-import com.pusher.client.connection.impl.InternalConnection;
-import com.pusher.client.util.Factory;
 
 public class WebSocketConnection implements InternalConnection, WebSocketListener {
     private static final Logger log = Logger.getLogger(WebSocketConnection.class.getName());
@@ -82,6 +79,7 @@ public class WebSocketConnection implements InternalConnection, WebSocketListene
 
     private void tryConnecting(){
         try {
+          log.info("Connecting to " + webSocketUri);
             underlyingConnection = factory
                     .newWebSocketClientWrapper(webSocketUri, proxy, WebSocketConnection.this);
             updateState(ConnectionState.CONNECTING);

@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import java.net.Proxy;
 import java.net.URI;
 
+import org.java_websocket.handshake.ServerHandshake;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,6 @@ import com.pusher.client.connection.websocket.WebSocketConnection;
 import com.pusher.client.connection.websocket.WebSocketListener;
 import com.pusher.client.util.DoNothingExecutor;
 import com.pusher.client.util.Factory;
-import com.pusher.java_websocket.handshake.ServerHandshake;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EndToEndTest {
@@ -49,7 +49,8 @@ public class EndToEndTest {
 
     private @Mock Authorizer mockAuthorizer;
     private @Mock ConnectionEventListener mockConnectionEventListener;
-    private @Mock ServerHandshake mockServerHandshake;
+    private @Mock
+    ServerHandshake mockServerHandshake;
     private @Mock Factory factory;
     private Pusher pusher;
     private PusherOptions pusherOptions;
